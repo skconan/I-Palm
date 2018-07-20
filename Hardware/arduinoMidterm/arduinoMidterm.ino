@@ -15,8 +15,6 @@ struct ProjectData {
   int32_t led_Y;
   int32_t led_B;
   int32_t led_W;
-  int32_t servo;
-  int32_t lastServo;
 } project_data = { 0, 0, 0 , 0, 0, 0};
 
 struct ServerData {
@@ -26,7 +24,7 @@ struct ServerData {
   int32_t lightOut;
   int32_t doorOn;
   int32_t ringOn;
-} server_data = { 0, 0, 0, 0, 0};
+} server_data = { 0, 0, 0, 0, 0, 0};
 
 const char GET_SERVER_DATA = 1;
 const char GET_SERVER_DATA_RESULT = 2;
@@ -127,6 +125,14 @@ void loop() {
               noTone(BUZZER);
               Serial.print("Buzzer: ON");
             }
+            
+            if(data -> swPressed == 1 and data -> doorOn == 0) {
+              myservo.write(180);
+              server_data.lastservo = 1;
+            }
+            else if(data -> swPressed == 1 and data -> doorOn == 1) {
+              
+            }
               /*tone(buzzer, 2000);
               delay(200);
               noTone(buzzer);
@@ -160,9 +166,7 @@ void loop() {
               Serial.print("LightIn: OFF");
             }
 
-            if(data -> doorOn == 1 and data -> doorOn != ) {
-              
-            }
+            
             
             /*Serial.print("temp status: ");
             Serial.println(data->temp);
