@@ -9,7 +9,10 @@
   border-radius: 50%;
 }
 .background{
-  background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%); 
+  background-image: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%); 
+}
+.header{
+
 }
 .box {
     width: 350px;
