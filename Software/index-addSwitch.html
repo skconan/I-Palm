@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
+    <title>Smart House</title>
+</head>
+
+<body>
+    <div>
+       <h1 align="center">Smart House</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <div class="background">
+                    <div class="page">
+                        <div class="center">
+                            <img src="https://image.flaticon.com/icons/svg/125/125296.svg" alt="" style="width:300px;height:300px;">
+                        </div>
+                        <br>
+                        <br>
+                        <div class="center">
+                            <!-- //ring-switch -->
+                            <div class="row">
+                                <div class="col-4">
+                                    <img class="img" src="http://icons.iconarchive.com/icons/webalys/kameleon.pics/256/Bell-icon.png" alt="" style="width:70;height:70px;">
+                                </div>
+                                <div class="col-3" id="ringArea">
+                                    <button type="button" class="btn btn-danger" id="ring">Ring</button>
+                                </div>
+                            </div>
+                            <br>
+                            <!-- door-switch -->
+                            <div class="row">
+                                <div class="col-4">
+                                    <img class="img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Circle-icons-door.svg/2000px-Circle-icons-door.svg.png"
+                                        alt="" style="width:70;height:70px;">
+                                </div>
+                                <div class="col-3">
+                                    <label class="switch">
+                                        <input type="checkbox" id="door" onclick="doorSwitch()" >
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="col-5" id="door-switch">
+                                    <div class="alert alert-warning" role="alert" >
+                                        close
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <!-- air-switch -->
+                            <div class="row">
+                                <div class="col-4">
+                                    <img class="img" src="data:image/png;base64,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"
+                                        alt="" style="width:70;height:70px;">
+                                </div>
+                                <div class="col-3">
+                                    <label class="switch">
+                                        <input type="checkbox" id="air" onclick="airSwitch()">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="col-5" id="air-switch">
+                                    <div class="alert alert-warning" role="alert">
+                                        off
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <!-- //light-inside -->
+                            <div class="row">
+                                <div class="col-4">
+                                    <img class="img" src="https://freeiconshop.com/wp-content/uploads/edd/bulb-curvy-flat.png" alt="" style="width:70;height:70px;">
+                                </div>
+                                <div class="col-3">
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider round" id="light-in"></span>
+                                    </label>
+                                </div>
+                                <div class="col-5">
+                                    <div class="alert alert-warning" role="alert">
+                                        off
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <!-- light-outside -->
+                            <div class="row">
+                                <div class="col-4">
+                                    <img class="img" src="http://custom-business-software.com/wp-content/uploads/2016/04/Icon_Lightbulb.png" alt="" style="width:70;height:70px;">
+                                </div>
+                                <div class="col-3">
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider round" id="light-out"></span>
+                                    </label>
+                                </div>
+                                <div class="col-5">
+                                    <div class="alert alert-warning" role="alert">
+                                        off
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <!-- graph -->
+                            <div id="graph" class="row">
+                                <div class="col-4">
+                                    <img class="img" src="http://icons.iconarchive.com/icons/webalys/kameleon.pics/256/Money-Graph-icon.png" alt="" style="width:70;height:70px;">
+                                </div>
+                                <div class="col-3">
+                                </div>
+                                <div class="col-5">
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+        crossorigin="anonymous"></script>
+    <script src="./main_server.js"></script>
+</body>
+
+</html>
