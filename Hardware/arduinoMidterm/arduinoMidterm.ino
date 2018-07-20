@@ -15,9 +15,6 @@ Servo myservo;
 SoftwareSerial se_read(12, 13); // write only
 SoftwareSerial se_write(10, 11); // read only
 ///////////////////////////////
-char notes[] = "ccggaag ffeeddc ggffeed ggffeed ccggaag ffeeddc "; // a space represents a rest
-int beats[] = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 4 };
-int tempo = 300;
 ///////////////////////////////
 struct ProjectData {
   int32_t sw;
@@ -26,7 +23,7 @@ struct ProjectData {
   int32_t led_W;
   float humid;
   int32_t light;
-} project_data = { 0, 0, 0 , 0, 0, 400.0};
+} project_data = { -1, -1, -1 , -1, -1, -1};
 
 struct ServerData {
   int32_t swPressed;
@@ -34,28 +31,61 @@ struct ServerData {
   int32_t lightIn;
   int32_t lightOut;
   int32_t doorOn;
-} server_data = { 0, 0, 0, 0, 0, 0};
+} server_data = { -1, -1, -1, -1, -1};
 
 const char GET_SERVER_DATA = 1;
 const char GET_SERVER_DATA_RESULT = 2;
 const char UPDATE_PROJECT_DATA = 3;
 
-void playNote(char note, int duration) {
-  char names[] = { 'c', 'd', 'e', 'f', 'g', 'a', 'b', 'C' };
+void ringOn(){
+  tone(BUZZER, 2000);
+  delay(500);
+  noTone(BUZZER);
+  delay(500);
+  tone(BUZZER, 2000);
+  delay(200);
+  noTone(BUZZER);
+  delay(200);
+  tone(BUZZER, 2000);
+  delay(200);
+  noTone(BUZZER);
+  delay(200);
+  tone(BUZZER, 2000);
+  delay(200);
+  noTone(BUZZER);
+}
+void playNote(char note) {
+  char names[] = { ' ', 'c', 'd', 'e', 'f', 'g', 'a', 'b', 'C' };
   int tones[] = { 1915, 1700, 1519, 1432, 1275, 1136, 1014, 956 };
   
   // play the tone corresponding to the note name
-  for (int i = 0; i < 8; i++) {
-    if (names[i] == note) {
-      playTone(tones[i], duration);
-    }
+  if(note != ' '){
+    tone(BUZZER, tone[note]);
+    delay(200);
+    noTone(BUZZER);
+  }
+  else {
+    delay(200);
   }
 }
 
 void playSong(){
-  for(int i = 0; i < 14; i++) {
-    tone(BUZZER, );
-  }
+    playNote(1);
+    playNote(1);
+    playNote(2);
+    playNote(2);
+    playNote(6);
+    playNote(6);
+    playNote(5);
+    playNote(0);
+    playNote(4);
+    playNote(4);
+    playNote(2);
+    playNote(2);
+    playNote(3);
+    playNote(3);
+    playNote(1);
+  
 }
 
 void send_to_nodemcu(char code, void *data, char data_size) {
@@ -110,6 +140,8 @@ void loop() {
   int a = digitalRead(SW);
   project_data.humid = dht.readHumidity();
   project_data.sw = a; //set sw to project data
+  Serial.print("SW Input: ");
+  Serial.println(project_data.sw);
   project_data.light = analogRead(ldr);
   Serial.print("light :");
   Serial.print(project_data.light);
@@ -118,7 +150,7 @@ void loop() {
 //  project
   if(a == 0){
     Serial.println("Press");
-    delay(1000);
+    delay(500);
   }
   //Serial.println(server_data.airOn);
   /*project_data.plus = b;
@@ -161,16 +193,19 @@ void loop() {
             Serial.print("SW: ");
             Serial.println(data->swPressed);
             //Serial.println(server_data.swPressed);
-            if(data -> swPressed == 0) {
-              tone(BUZZER, 2000);
+            if(project_data.sw == 0) {
+              //playSong();
+              /*tone(BUZZER, 2000);
               delay(500);
               noTone(BUZZER);
               Serial.print("Buzzer: ON ");
-              
+              */
+              ringOn();
             }
-            else if(data -> swPressed == 1) {
+            else if(project_data.sw == 1) {
               Serial.print("Buzzer: OFF ");
             }
+            
             if(data -> doorOn == 0) {
               myservo.write(180);
               //delay(500);
@@ -188,26 +223,26 @@ void loop() {
               tone(buzzer, 2000);
               delay(200);
               noTone(buzzer);*/
-            if(data -> airOn == 1 or project_data.humid > 500) {
+            if(data -> airOn == 1 or project_data.humid > 700) {
               digitalWrite(LED_Y, HIGH);
               Serial.print("Air: ON ");
               project_data.led_Y = 1;
               //delay(500);
             }
-            else if(data -> airOn == 0 or project_data.humid <= 500) {
+            else if(data -> airOn == 0 or project_data.humid < 700) {
               digitalWrite(LED_Y, LOW);
               Serial.print("Air: OFF ");
               project_data.led_Y = 0;
               //delay(500);
             }
             
-            if(data -> lightOut == 1 or project_data.light < 500) {
+            if(data -> lightOut == 1 or project_data.light <= 200) {
               digitalWrite(LED_B, HIGH);
               Serial.print("LightOut: ON ");
               project_data.led_B = 1;
               //delay(500);
             }
-            else if(data -> lightOut == 0 or project_data.light >= 500) {
+            else if(data -> lightOut == 0 or project_data.light > 200) {
               digitalWrite(LED_B, LOW);
               Serial.print("LightOut: OFF ");
               project_data.led_B = 0;
@@ -245,7 +280,7 @@ void loop() {
             }*/
             //server_data.plus = data->plus;
             
-            send_to_nodemcu(UPDATE_PROJECT_DATA, &project_data, sizeof(ProjectData));
+//            send_to_nodemcu(UPDATE_PROJECT_DATA, &project_data, sizeof(ProjectData));
             Serial.println("UPDATE");
           } break;
         }
